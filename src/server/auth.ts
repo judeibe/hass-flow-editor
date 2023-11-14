@@ -3,9 +3,9 @@ import {
   type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
-import DiscordProvider from "next-auth/providers/discord";
 
 import { env } from "~/env.mjs";
+import HomeAssistantProvider from "./homeAssitantProvider";
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -34,19 +34,10 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authOptions: NextAuthOptions = {
-  callbacks: {
-    session: ({ session, token }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: token.sub,
-      },
-    }),
-  },
   providers: [
-    DiscordProvider({
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
+    HomeAssistantProvider({
+      clientId: env.HOME_ASSISTANT_CLIENT_ID,
+      clientSecret: "",
     }),
     /**
      * ...add more providers here.
